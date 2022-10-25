@@ -47,49 +47,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Container(
           color: Colors.white70,
           child: Row(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
@@ -107,37 +78,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 '10',
                 style: Theme.of(context).textTheme.headline4,
               ),
-              RawKeyboardListener(
-                onKey: (RawKeyEvent event) {
-                  print(event.logicalKey.keyId);
-                  if (event.logicalKey.keyId == 4294967309) {
-                    print("pressed");
-                  }
-                },
-                focusNode: FocusNode(),
-                child: const Padding(
-                  padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 30.0),
-                    decoration: InputDecoration(
-                      constraints: BoxConstraints.tightFor(
-                        width: 60.00,
-                      ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 30.0),
+                  decoration: InputDecoration(
+                    constraints: BoxConstraints.tightFor(
+                      width: 60.00,
                     ),
-                    keyboardType: TextInputType.number,
                   ),
+                  keyboardType: TextInputType.number,
                 ),
               ),
             ],
           ),
         )
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
