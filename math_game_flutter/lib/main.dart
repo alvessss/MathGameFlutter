@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,40 +20,42 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      home: const MyHomePage(title: 'Math Game'),
+      home: const HomePage(title: 'Math Game'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  final Random random = Random();
+  final int MAX = 100;
+  
+  int currentA = 0;
+  int currentB = 0;
+  String currentOperator = "+";
+  static List<String> availableOperators = ["-", "+", "/", "*"];
 
-  void _incrementCounter() {
+  void generateNewExpression() {
     setState(() {
-      _counter++;
+      int randOperator = random.nextInt(availableOperators.length); // temp
+      currentA = random.nextInt(MAX);
+      currentB = random.nextInt(MAX);
+      currentOperator = availableOperators[randOperator];
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    generateNewExpression();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -64,18 +67,18 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                '7',
+                '$currentA',
                 style: Theme.of(context).textTheme.headline4,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
                 child: Text(
-                  '+',
+                  currentOperator,
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),
               Text(
-                '10',
+                '$currentB',
                 style: Theme.of(context).textTheme.headline4,
               ),
               const Padding(
@@ -89,11 +92,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.done,
                 ),
               ),
             ],
           ),
         )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          generateNewExpression();
+        },
       ),
     );
   }
