@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,8 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
-  // Esta Ferramenta é a raiz da sua aplicação
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,27 +30,65 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final Random random = Random();
-  final int MAX = 100;
-  
-  int currentA = 0;
-  int currentB = 0;
-  String currentOperator = "+";
-  static List<String> availableOperators = ["-", "+", "/", "*"];
+enum Operator {
+  addiction, subtraction, multiplication, division
+}
 
-  void generateNewExpression() {
-    setState(() {
-      int randOperator = random.nextInt(availableOperators.length); // temp
-      currentA = random.nextInt(MAX);
-      currentB = random.nextInt(MAX);
-      currentOperator = availableOperators[randOperator];
-    });
+class ExpressionGenerator {
+  final Random randomNumberGenerator = Random();
+  static const int max = 100;
+
+  int a = 0;
+  int b = 0;
+  String operator = "+";
+  Operator _operator = Operator.addiction;
+
+  Operator _getRandomOperator() {
+    return Operator.values[
+      randomNumberGenerator.nextInt(Operator.values.length)
+    ];
   }
+
+  void generate() {
+    _operator = _getRandomOperator();
+    a = randomNumberGenerator.nextInt(max);
+    b = randomNumberGenerator.nextInt(max);
+
+    switch (_operator) {
+      case Operator.addiction:
+        operator = "+";
+        break;
+      case Operator.subtraction:
+        operator = "-";
+        // avoid negative numbers
+        if (b > a) {
+          int temp = b;
+          b = a;
+          a = temp;
+        }
+        break;
+      case Operator.multiplication:
+        operator = "*";
+        break;
+      case Operator.division:
+        operator = "/";
+        // avoid float numbers
+        int multiplicationResult = a * b;
+        b = a;
+        a = multiplicationResult;
+        break;
+    }
+  }
+}
+
+class _HomePageState extends State<HomePage> {
+  final ExpressionGenerator expression = ExpressionGenerator();
+
+  TextEditingController myTextFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    generateNewExpression();
+    expression.generate();
 
     return Scaffold(
       appBar: AppBar(
@@ -67,32 +101,33 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                '$currentA',
+                expression.a.toString(),
                 style: Theme.of(context).textTheme.headline4,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
                 child: Text(
-                  currentOperator,
+                  expression.operator,
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),
               Text(
-                '$currentB',
+                expression.b.toString(),
                 style: Theme.of(context).textTheme.headline4,
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
                 child: TextField(
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 30.0),
-                  decoration: InputDecoration(
+                  style: const TextStyle(fontSize: 30.0),
+                  decoration: const InputDecoration(
                     constraints: BoxConstraints.tightFor(
                       width: 60.00,
                     ),
                   ),
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.done,
+                  controller: myTextFieldController,
                 ),
               ),
             ],
@@ -101,7 +136,10 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          generateNewExpression();
+          setState(() {
+            expression.generate();
+            myTextFieldController.clear();
+          });
         },
       ),
     );
