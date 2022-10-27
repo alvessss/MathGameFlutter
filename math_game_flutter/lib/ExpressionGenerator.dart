@@ -11,6 +11,7 @@ class ExpressionGenerator {
 
   int a = 0;
   int b = 0;
+  int result = 0;
   String operator = "+";
   Operator _operator = Operator.addiction;
 
@@ -28,6 +29,7 @@ class ExpressionGenerator {
     switch (_operator) {
       case Operator.addiction:
         operator = "+";
+        result = a + b;
         break;
       case Operator.subtraction:
         operator = "-";
@@ -37,9 +39,11 @@ class ExpressionGenerator {
           b = a;
           a = temp;
         }
+        result = a - b;
         break;
       case Operator.multiplication:
         operator = "*";
+        result = a * b;
         break;
       case Operator.division:
         operator = "/";
@@ -47,6 +51,7 @@ class ExpressionGenerator {
         int multiplicationResult = a * b;
         b = a;
         a = multiplicationResult;
+        result = a ~/ b;
         break;
     }
   }
