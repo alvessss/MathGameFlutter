@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'ExpressionGenerator.dart';
 
@@ -53,27 +54,30 @@ class _HomePageState extends State<HomePage> {
         body: Container(
           width: 300,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
                 children: List.generate(5, (index) =>
                     SizedBox(
                         width: 300,
-                        child: Text("hello world $index")
+                        child: Text("")
                     )
                 ),
               ),
               Row(
-                children: const [
+                children: [
                   SizedBox(
-                    child: Text("113 + 12 = ", style: TextStyle(fontSize: 35, color: Colors.blueGrey)),
+                    child:
+                      Text(
+                        "${exp.a} ${exp.operator} ${exp.b} = ",
+                        style: const TextStyle(fontSize: 35, color: Colors.blueGrey)
+                      ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                       width: 100,
                       child: TextField()
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
